@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { COLORS } from "./theme/colors";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import VideoShowcase from "./components/VideoShowcase";
@@ -23,8 +24,8 @@ export default function App() {
     <div style={{ fontFamily: "Inter, sans-serif" }}>
       <div
         style={{
-          background: "#091d34",
-          color: "#cfe0f5",
+          background: COLORS.navyDeep,
+          color: "#DCEAE0",
           textAlign: "center",
           fontSize: 13.5,
           padding: "9px 16px",
@@ -32,7 +33,7 @@ export default function App() {
         }}
       >
         📦 Livraison gratuite partout au Maroc - Album photo de voyage{" "}
-        <strong style={{ color: "#F0A83A" }}>personnalisé par IA</strong>
+        <strong style={{ color: COLORS.gold }}>personnalisé par IA</strong>
       </div>
 
       <Header onNavigate={navigateTo} />

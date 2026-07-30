@@ -1,21 +1,15 @@
-// Central palette for OXmemo.
-//
-// NOTE ON SOURCE: this is an approximation of offresexclusives.org's
-// navy + gold job-board look. The site is Blogger-hosted and its compiled
-// CSS/theme color isn't reachable through automated fetch tools, so these
-// hex values are a professional-judgment match, not a verified extraction.
-// If you get exact hex codes from the site's devtools, update them here —
-// every component reads from this single file.
+// Central palette for OXmemo — extracted directly from the OxMemo logo
+// (deep forest green + gold). Every component reads from this single file.
 export const COLORS = {
-  navy: "#d52c1f",
-  navyDeep: "#d52c1f",
-  ocean: "#d52c1f",
-  oceanLight: "#d33d32",
-  gold: "#F0A83A",
-  goldDark: "#D68F22",
-  mist: "#F4F7FB",
-  ink: "#d52c1f",
-  inkSoft: "#5A6B7D",
-  border: "#E3E9F1",
+  navy: "#0E3D30",
+  navyDeep: "#082A21",
+  ocean: "#1F6E58",
+  oceanLight: "#3D8F73",
+  gold: "#C19B55",
+  goldDark: "#A17F3F",
+  mist: "#F7F5F0",
+  ink: "#1C2B22",
+  inkSoft: "#5B685F",
+  border: "#E4E1D8",
   white: "#FFFFFF",
 };

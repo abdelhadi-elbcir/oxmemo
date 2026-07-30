@@ -4,7 +4,7 @@ const VARIANTS = {
   primary: {
     background: `linear-gradient(135deg, ${COLORS.gold}, ${COLORS.goldDark})`,
     color: COLORS.navyDeep,
-    boxShadow: "0 12px 24px -8px rgba(240,168,58,0.55)",
+    boxShadow: "0 12px 24px -8px rgba(193,155,85,0.55)",
   },
   outline: {
     background: "transparent",

@@ -13,7 +13,7 @@ export default function FormatSection() {
         </div>
         <div
           className="flex flex-wrap items-center justify-center gap-10"
-          style={{ borderRadius: 24, overflow: "hidden", background: `linear-gradient(135deg, ${COLORS.navy}, #173a5e)`, padding: 50 }}
+          style={{ borderRadius: 24, overflow: "hidden", background: `linear-gradient(135deg, ${COLORS.navy}, #1B4636)`, padding: 50 }}
         >
           <div
             style={{
@@ -36,7 +36,7 @@ export default function FormatSection() {
               <div style={{ height: 6, width: "50%", background: COLORS.mist, borderRadius: 3 }} />
             </div>
           </div>
-          <div style={{ color: "#b9cbe1", fontSize: 14, maxWidth: 280, lineHeight: 1.7 }}>
+          <div style={{ color: "#C4D6C8", fontSize: 14, maxWidth: 280, lineHeight: 1.7 }}>
             <strong className="font-display" style={{ color: COLORS.gold, display: "block", fontSize: 17, marginBottom: 8 }}>
               21 × 21 cm — couverture rigide
             </strong>

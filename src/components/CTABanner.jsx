@@ -15,13 +15,13 @@ export default function CTABanner({ onNavigate }) {
             color: COLORS.navyDeep,
           }}
         >
-          <Eyebrow style={{ background: "rgba(15,42,74,0.1)", color: COLORS.navy }}>
+          <Eyebrow style={{ background: "rgba(14,61,48,0.1)", color: COLORS.navy }}>
             Prêt à immortaliser vos souvenirs ?
           </Eyebrow>
           <h2 className="font-display" style={{ color: COLORS.navyDeep, fontSize: 28, marginTop: 14 }}>
             Créez votre album OXmemo dès aujourd'hui
           </h2>
-          <p style={{ marginTop: 12, fontSize: 15.5, color: "#5a3f0f" }}>
+          <p style={{ marginTop: 12, fontSize: 15.5, color: COLORS.navyDeep }}>
             Composition par IA, impression premium, livraison gratuite partout au Maroc.
           </p>
           <div style={{ marginTop: 26 }}>

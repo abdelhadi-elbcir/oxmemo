@@ -4,20 +4,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Approximated from offresexclusives.org (navy + gold job-board style).
-        // offresexclusives.org is Blogger-hosted; its compiled CSS/theme colors
-        // aren't reachable through automated fetch. Swap these for exact hex
-        // values here if you pull them from the site's devtools.
-        navy: "#0F2A4A",
-        "navy-deep": "#091d34",
-        ocean: "#2C6FD1",
-        "ocean-light": "#5C94E6",
-        gold: "#F0A83A",
-        "gold-dark": "#D68F22",
-        mist: "#F4F7FB",
-        ink: "#1C2B3A",
-        "ink-soft": "#5A6B7D",
-        border: "#E3E9F1",
+        // Extracted from the OxMemo logo (deep forest green + gold).
+        navy: "#0E3D30",
+        "navy-deep": "#082A21",
+        ocean: "#1F6E58",
+        "ocean-light": "#3D8F73",
+        gold: "#C19B55",
+        "gold-dark": "#A17F3F",
+        mist: "#F7F5F0",
+        ink: "#1C2B22",
+        "ink-soft": "#5B685F",
+        border: "#E4E1D8",
       },
       fontFamily: {
         display: ["Sora", "sans-serif"],

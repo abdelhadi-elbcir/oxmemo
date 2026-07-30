@@ -12,7 +12,7 @@ export default function Eyebrow({ children, style = {} }) {
         letterSpacing: "0.08em",
         textTransform: "uppercase",
         color: COLORS.goldDark,
-        background: "rgba(240,168,58,0.12)",
+        background: "rgba(193,155,85,0.12)",
         padding: "6px 14px",
         borderRadius: 999,
         ...style,

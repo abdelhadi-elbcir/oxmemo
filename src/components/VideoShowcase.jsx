@@ -25,7 +25,7 @@ export default function VideoShowcase() {
                 background: COLORS.navy,
                 aspectRatio: "9/13",
                 position: "relative",
-                boxShadow: "0 20px 45px -20px rgba(15,42,74,0.25)",
+                boxShadow: "0 20px 45px -20px rgba(14,61,48,0.25)",
               }}
             >
               <video
@@ -41,7 +41,7 @@ export default function VideoShowcase() {
                   position: "absolute",
                   top: 14,
                   left: 14,
-                  background: "rgba(9,29,52,0.55)",
+                  background: "rgba(8,42,33,0.55)",
                   backdropFilter: "blur(4px)",
                   color: COLORS.white,
                   fontSize: 12,

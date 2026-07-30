@@ -11,7 +11,7 @@ const ALBUM_CARDS = [
       transform: "rotate(-9deg) translate(-38px,10px)",
       opacity: 0.75,
       zIndex: 1,
-      background: "linear-gradient(155deg,#1c4066,#0f2a4a)",
+      background: "linear-gradient(155deg,#1B4636,#0E3D30)",
     },
   },
   {
@@ -21,13 +21,13 @@ const ALBUM_CARDS = [
       transform: "rotate(6deg) translate(30px,-8px)",
       opacity: 0.9,
       zIndex: 2,
-      background: "linear-gradient(155deg,#1c4066,#0f2a4a)",
+      background: "linear-gradient(155deg,#1B4636,#0E3D30)",
     },
   },
   {
     label: "DAKHLA",
     sub: "Solo · 50 pages",
-    style: { zIndex: 3, background: "linear-gradient(155deg,#28527e,#12314f)" },
+    style: { zIndex: 3, background: "linear-gradient(155deg,#2C6B54,#0D3226)" },
   },
 ];
 
@@ -36,7 +36,7 @@ export default function Hero({ onNavigate }) {
     <section
       id="hero"
       style={{
-        background: `radial-gradient(1200px 500px at 15% -10%, rgba(44,111,209,0.18), transparent), linear-gradient(180deg, ${COLORS.navyDeep} 0%, ${COLORS.navy} 60%, #123157 100%)`,
+        background: `radial-gradient(1200px 500px at 15% -10%, rgba(31,110,88,0.22), transparent), linear-gradient(180deg, ${COLORS.navyDeep} 0%, ${COLORS.navy} 60%, #0A3226 100%)`,
         color: COLORS.white,
         padding: "70px 0 88px",
         position: "relative",
@@ -48,7 +48,7 @@ export default function Hero({ onNavigate }) {
         style={{ maxWidth: 1180, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 2 }}
       >
         <div>
-          <Eyebrow style={{ background: "rgba(240,168,58,0.15)" }}>✦ Album photo de voyage personnalisé</Eyebrow>
+          <Eyebrow style={{ background: "rgba(193,155,85,0.15)" }}>✦ Album photo de voyage personnalisé</Eyebrow>
           <h1
             className="font-display"
             style={{ color: COLORS.white, fontSize: 44, lineHeight: 1.1, marginTop: 20, letterSpacing: "-0.01em" }}
@@ -57,7 +57,7 @@ export default function Hero({ onNavigate }) {
             <br />
             un écrin d'<span style={{ color: COLORS.gold }}>exception</span>
           </h1>
-          <p style={{ fontSize: 17.5, color: "#c6d6ea", marginTop: 20, maxWidth: 460 }}>
+          <p style={{ fontSize: 17.5, color: "#D2E3D6", marginTop: 20, maxWidth: 460 }}>
             Des albums photo premium, façonnés au Maroc. Capturez vos moments précieux dans un livre qui dure toute
             une vie.
           </p>
@@ -69,7 +69,7 @@ export default function Hero({ onNavigate }) {
           </div>
           <div className="flex flex-wrap gap-5" style={{ marginTop: 34 }}>
             {["Imprimé au Maroc", "Livraison gratuite", "Composition par IA"].map((t) => (
-              <span key={t} style={{ fontSize: 13.5, color: "#9db3cc", display: "flex", alignItems: "center", gap: 7 }}>
+              <span key={t} style={{ fontSize: 13.5, color: "#A9C2AE", display: "flex", alignItems: "center", gap: 7 }}>
                 <Check size={14} color={COLORS.gold} strokeWidth={3} /> {t}
               </span>
             ))}
@@ -83,7 +83,7 @@ export default function Hero({ onNavigate }) {
               width: "100%",
               aspectRatio: "4/5",
               borderRadius: 22,
-              background: "linear-gradient(160deg,#16375f,#0c2138)",
+              background: "linear-gradient(160deg,#153F30,#08201A)",
               boxShadow: "0 40px 80px -30px rgba(0,0,0,0.55)",
               border: "1px solid rgba(255,255,255,0.08)",
             }}
@@ -118,14 +118,14 @@ export default function Hero({ onNavigate }) {
                       height: 34,
                       borderRadius: "50%",
                       background: COLORS.gold,
-                      boxShadow: "0 6px 14px rgba(240,168,58,0.5)",
+                      boxShadow: "0 6px 14px rgba(193,155,85,0.5)",
                     }}
                   />
                 )}
                 <div className="font-display" style={{ fontWeight: 700, color: COLORS.white, fontSize: 14 }}>
                   {c.label}
                 </div>
-                <div style={{ color: "#a9c0da", fontSize: 11.5, marginTop: 4 }}>{c.sub}</div>
+                <div style={{ color: "#B4C9B9", fontSize: 11.5, marginTop: 4 }}>{c.sub}</div>
               </div>
             ))}
             <div
@@ -140,7 +140,7 @@ export default function Hero({ onNavigate }) {
                 fontSize: 12.5,
                 padding: "7px 16px",
                 borderRadius: 999,
-                boxShadow: "0 10px 20px -6px rgba(240,168,58,0.6)",
+                boxShadow: "0 10px 20px -6px rgba(193,155,85,0.6)",
                 whiteSpace: "nowrap",
                 zIndex: 4,
               }}

@@ -37,7 +37,7 @@ export default function Packs({ selectedPack, onSelectPack, onNavigate }) {
                 overflow: "hidden",
                 display: "flex",
                 flexDirection: "column",
-                boxShadow: pack.popular ? "0 25px 50px -25px rgba(240,168,58,0.45)" : "none",
+                boxShadow: pack.popular ? "0 25px 50px -25px rgba(193,155,85,0.45)" : "none",
               }}
             >
               {pack.popular && (

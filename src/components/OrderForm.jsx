@@ -41,11 +41,11 @@ export default function OrderForm({ selectedPack, onSelectPack }) {
           }}
         >
           <div style={{ position: "relative", zIndex: 1 }}>
-            <Eyebrow style={{ background: "rgba(240,168,58,0.15)" }}>Commander</Eyebrow>
+            <Eyebrow style={{ background: "rgba(193,155,85,0.15)" }}>Commander</Eyebrow>
             <h2 className="font-display" style={{ color: COLORS.white, fontSize: 28, marginTop: 14 }}>
               Commander mon album OXmemo
             </h2>
-            <p style={{ color: "#b9cbe1", marginTop: 14, fontSize: 15, lineHeight: 1.7 }}>
+            <p style={{ color: "#C4D6C8", marginTop: 14, fontSize: 15, lineHeight: 1.7 }}>
               Complétez vos informations pour finaliser votre album souvenir. Notre équipe vous contacte sur
               WhatsApp pour confirmer les détails avant impression.
             </p>
@@ -55,7 +55,7 @@ export default function OrderForm({ selectedPack, onSelectPack }) {
                 width: 130,
                 height: 130,
                 borderRadius: "50%",
-                border: "2.5px dashed rgba(240,168,58,0.55)",
+                border: "2.5px dashed rgba(193,155,85,0.55)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",

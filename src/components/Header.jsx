@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { COLORS } from "../theme/colors";
-import LogoMark from "./ui/LogoMark";
 import Button from "./ui/Button";
 
 export default function Header({ onNavigate }) {
@@ -43,8 +42,7 @@ export default function Header({ onNavigate }) {
           className="font-display flex items-center gap-2.5"
           style={{ fontWeight: 800, fontSize: 22, color: COLORS.navy }}
         >
-          <LogoMark />
-          OXmemo
+          <img src="/logo-600.png" alt="OxMemo" style={{ height: 58, width: "auto" }} />
         </a>
 
         <div className="hidden md:flex items-center gap-7">
@@ -79,6 +77,11 @@ export default function Header({ onNavigate }) {
           className="md:hidden flex flex-col gap-1"
           style={{ padding: "8px 24px 18px", borderTop: `1px solid ${COLORS.border}` }}
         >
+          <img
+            src="/logo-600.png"
+            alt="OxMemo"
+            style={{ height: 48, width: "auto", margin: "10px 0 6px" }}
+          />
           {links.map((l) => (
             <a key={l.id} onClick={() => go(l.id)} style={{ padding: "10px 0", fontWeight: 600 }}>
               {l.label}
