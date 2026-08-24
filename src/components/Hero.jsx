@@ -6,28 +6,26 @@ import Button from "./ui/Button";
 const ALBUM_CARDS = [
   {
     label: "MARRAKECH",
-    sub: "Été 2026",
+    image: "/designs/marrakech.png",
     style: {
       transform: "rotate(-9deg) translate(-38px,10px)",
-      opacity: 0.75,
+      opacity: 0.82,
       zIndex: 1,
-      background: "linear-gradient(155deg,#1B4636,#0E3D30)",
     },
   },
   {
     label: "CHEFCHAOUEN",
-    sub: "Duo · 48 pages",
+    image: "/designs/chefchaouen.png",
     style: {
       transform: "rotate(6deg) translate(30px,-8px)",
-      opacity: 0.9,
+      opacity: 0.88,
       zIndex: 2,
-      background: "linear-gradient(155deg,#1B4636,#0E3D30)",
     },
   },
   {
     label: "DAKHLA",
-    sub: "Solo · 50 pages",
-    style: { zIndex: 3, background: "linear-gradient(155deg,#2C6B54,#0D3226)" },
+    image: "/designs/dakhla.png",
+    style: { zIndex: 3 },
   },
 ];
 
@@ -68,7 +66,7 @@ export default function Hero({ onNavigate }) {
             </Button>
           </div>
           <div className="flex flex-wrap gap-5" style={{ marginTop: 34 }}>
-            {["Imprimé au Maroc", "Livraison gratuite", "Composition par IA"].map((t) => (
+            {["Imprimé au Maroc", "Livraison gratuite", "Mise en page soignée"].map((t) => (
               <span key={t} style={{ fontSize: 13.5, color: "#A9C2AE", display: "flex", alignItems: "center", gap: 7 }}>
                 <Check size={14} color={COLORS.gold} strokeWidth={3} /> {t}
               </span>
@@ -98,55 +96,22 @@ export default function Hero({ onNavigate }) {
                   borderRadius: 16,
                   boxShadow: "0 25px 50px -18px rgba(0,0,0,0.5)",
                   border: "1px solid rgba(255,255,255,0.12)",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-end",
-                  padding: 22,
+                  overflow: "hidden",
+                  background: "#123b2e",
                   top: "50%",
                   left: "50%",
                   translate: "-50% -50%",
                   ...c.style,
                 }}
               >
-                {i === 2 && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 14,
-                      right: 14,
-                      width: 34,
-                      height: 34,
-                      borderRadius: "50%",
-                      background: COLORS.gold,
-                      boxShadow: "0 6px 14px rgba(193,155,85,0.5)",
-                    }}
-                  />
-                )}
-                <div className="font-display" style={{ fontWeight: 700, color: COLORS.white, fontSize: 14 }}>
-                  {c.label}
-                </div>
-                <div style={{ color: "#B4C9B9", fontSize: 11.5, marginTop: 4 }}>{c.sub}</div>
+                <img
+                  src={c.image}
+                  alt={`Couverture d’album ${c.label}`}
+                  loading={i === 2 ? "eager" : "lazy"}
+                  style={{ width: "100%", height: "100%", display: "block", objectFit: "cover" }}
+                />
               </div>
             ))}
-            <div
-              style={{
-                position: "absolute",
-                bottom: -14,
-                left: "50%",
-                transform: "translateX(-50%)",
-                background: COLORS.gold,
-                color: COLORS.navyDeep,
-                fontWeight: 700,
-                fontSize: 12.5,
-                padding: "7px 16px",
-                borderRadius: 999,
-                boxShadow: "0 10px 20px -6px rgba(193,155,85,0.6)",
-                whiteSpace: "nowrap",
-                zIndex: 4,
-              }}
-            >
-              ✎ Composé par IA en 2 min
-            </div>
           </div>
         </div>
       </div>

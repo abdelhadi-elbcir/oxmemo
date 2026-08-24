@@ -5,7 +5,7 @@ import Eyebrow from "./ui/Eyebrow";
 import Button from "./ui/Button";
 
 const TRUST_ITEMS = [
-  { Icon: CreditCard, title: "Paiement à la livraison", text: "Payez uniquement à réception" },
+  { Icon: CreditCard, title: "Acompte de confirmation", text: "50 MAD pour lancer la création" },
   { Icon: Award, title: "Qualité premium", text: "Impression professionnelle" },
   { Icon: Truck, title: "Livraison gratuite", text: "Partout au Maroc en 5–7 jours" },
   { Icon: Star, title: "Imprimé au Maroc", text: "Savoir-faire local depuis 2024" },
@@ -67,8 +67,19 @@ export default function Packs({ selectedPack, onSelectPack, onNavigate }) {
                   {pack.name}
                 </h3>
                 <p style={{ color: COLORS.inkSoft, fontSize: 14, marginTop: 6 }}>{pack.tagline}</p>
-                <div className="font-display" style={{ fontSize: 32, fontWeight: 800, marginTop: 16, color: COLORS.navy }}>
-                  {pack.price} MAD
+                <div className="grid grid-cols-2 gap-2" style={{ marginTop: 18 }}>
+                  <div style={{ padding: "12px 10px", borderRadius: 12, background: COLORS.mist, border: `1px solid ${COLORS.border}` }}>
+                    <div style={{ color: COLORS.inkSoft, fontSize: 11.5, fontWeight: 700 }}>Couverture papier</div>
+                    <div className="font-display" style={{ color: COLORS.navy, fontSize: 21, fontWeight: 800, marginTop: 4 }}>
+                      {pack.prices.paper} <span style={{ fontSize: 11 }}>MAD</span>
+                    </div>
+                  </div>
+                  <div style={{ padding: "12px 10px", borderRadius: 12, background: "rgba(193,155,85,.12)", border: `1px solid ${COLORS.gold}` }}>
+                    <div style={{ color: COLORS.inkSoft, fontSize: 11.5, fontWeight: 700 }}>Couverture cartonnée</div>
+                    <div className="font-display" style={{ color: COLORS.navy, fontSize: 21, fontWeight: 800, marginTop: 4 }}>
+                      {pack.prices.cardboard} <span style={{ fontSize: 11 }}>MAD</span>
+                    </div>
+                  </div>
                 </div>
                 <ul style={{ listStyle: "none", padding: 0, margin: "18px 0 24px", display: "flex", flexDirection: "column", gap: 10 }}>
                   {pack.features.map((f) => (

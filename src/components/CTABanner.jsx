@@ -22,7 +22,7 @@ export default function CTABanner({ onNavigate }) {
             Créez votre album OXmemo dès aujourd'hui
           </h2>
           <p style={{ marginTop: 12, fontSize: 15.5, color: COLORS.navyDeep }}>
-            Composition par IA, impression premium, livraison gratuite partout au Maroc.
+            Mise en page soignée, impression premium, livraison gratuite partout au Maroc.
           </p>
           <div style={{ marginTop: 26 }}>
             <Button variant="navy" onClick={() => onNavigate("order")}>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { COLORS } from "./theme/colors";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
@@ -15,8 +15,34 @@ import WhatsAppFloat from "./components/WhatsAppFloat";
 
 export default function App() {
   const [selectedPack, setSelectedPack] = useState("duo");
+  const [page, setPage] = useState(() => window.location.pathname === "/commande" ? "order" : "home");
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setPage(window.location.pathname === "/commande" ? "order" : "home");
+      window.scrollTo({ top: 0 });
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
 
   const navigateTo = (id) => {
+    if (id === "order") {
+      window.history.pushState({}, "", "/commande");
+      setPage("order");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    if (page === "order") {
+      window.history.pushState({}, "", "/");
+      setPage("home");
+      window.setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 0);
+      return;
+    }
+
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
@@ -33,19 +59,28 @@ export default function App() {
         }}
       >
         📦 Livraison gratuite partout au Maroc - Album photo de voyage{" "}
-        <strong style={{ color: COLORS.gold }}>personnalisé par IA</strong>
+        <strong style={{ color: COLORS.gold }}>créé avec soin</strong>
       </div>
 
       <Header onNavigate={navigateTo} />
-      <Hero onNavigate={navigateTo} />
-      <VideoShowcase />
-      <Packs selectedPack={selectedPack} onSelectPack={setSelectedPack} onNavigate={navigateTo} />
-      <OrderForm selectedPack={selectedPack} onSelectPack={setSelectedPack} />
-      <Steps />
-      <FormatSection />
-      <Testimonials />
-      <FAQ />
-      <CTABanner onNavigate={navigateTo} />
+
+      {page === "home" ? (
+        <>
+          <Hero onNavigate={navigateTo} />
+          <VideoShowcase />
+          <Packs selectedPack={selectedPack} onSelectPack={setSelectedPack} onNavigate={navigateTo} />
+          <Steps />
+          <FormatSection />
+          <Testimonials />
+          <FAQ />
+          <CTABanner onNavigate={navigateTo} />
+        </>
+      ) : (
+        <main style={{ minHeight: "calc(100vh - 160px)", background: `linear-gradient(180deg, ${COLORS.mist}, #fff 70%)` }}>
+          <OrderForm selectedPack={selectedPack} onSelectPack={setSelectedPack} />
+        </main>
+      )}
+
       <Footer />
       <WhatsAppFloat />
     </div>

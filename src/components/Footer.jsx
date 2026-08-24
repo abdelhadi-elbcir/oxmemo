@@ -45,7 +45,7 @@ export default function Footer() {
               <img src="/logo-600.png" alt="OxMemo" style={{ height: 52, width: "auto", display: "block" }} />
             </div>
             <p style={{ marginTop: 16, fontSize: 14, lineHeight: 1.7, maxWidth: 280 }}>
-              Vos souvenirs précieux méritent un écrin d'exception. Albums photo composés par IA, imprimés au Maroc.
+              Vos souvenirs précieux méritent un écrin d'exception. Albums photo personnalisés, imprimés au Maroc.
             </p>
             <div className="flex gap-2.5" style={{ marginTop: 20 }}>
               <a href="#" style={socialIconStyle}>
