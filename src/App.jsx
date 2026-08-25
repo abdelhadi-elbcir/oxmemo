@@ -12,14 +12,22 @@ import FAQ from "./components/FAQ";
 import CTABanner from "./components/CTABanner";
 import Footer from "./components/Footer";
 import WhatsAppFloat from "./components/WhatsAppFloat";
+import DashboardApp from "./dashboard/DashboardApp";
+
+function pageFromPath() {
+  const path = window.location.pathname.toLowerCase().replace(/\/$/, "");
+  if (path === "/user/dashboard") return "dashboard";
+  if (path === "/commande") return "order";
+  return "home";
+}
 
 export default function App() {
   const [selectedPack, setSelectedPack] = useState("duo");
-  const [page, setPage] = useState(() => window.location.pathname === "/commande" ? "order" : "home");
+  const [page, setPage] = useState(pageFromPath);
 
   useEffect(() => {
     const handlePopState = () => {
-      setPage(window.location.pathname === "/commande" ? "order" : "home");
+      setPage(pageFromPath());
       window.scrollTo({ top: 0 });
     };
     window.addEventListener("popstate", handlePopState);
@@ -45,6 +53,10 @@ export default function App() {
 
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+
+  if (page === "dashboard") {
+    return <DashboardApp />;
+  }
 
   return (
     <div style={{ fontFamily: "Inter, sans-serif" }}>
