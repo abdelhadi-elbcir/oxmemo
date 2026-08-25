@@ -1,0 +1,71 @@
+name: Deploy React App
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          echo "${{ secrets.VPS_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Create release directory
+        run: |
+          ssh \
+            -i ~/.ssh/id_ed25519 \
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+            "mkdir -p /var/www/my-react-app/releases/${{ github.sha }}"
+
+      - name: Upload build
+        run: |
+          rsync -az --delete \
+            -e "ssh -i ~/.ssh/id_ed25519" \
+            dist/ \
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/my-react-app/releases/${{ github.sha }}/
+
+      - name: Activate release
+        run: |
+          ssh \
+            -i ~/.ssh/id_ed25519 \
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+            "ln -sfn /var/www/my-react-app/releases/${{ github.sha }} /var/www/my-react-app/current"
+
+      - name: Clean old releases
+        run: |
+          ssh \
+            -i ~/.ssh/id_ed25519 \
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+            'cd /var/www/my-react-app/releases && ls -dt */ 2>/dev/null | tail -n +6 | xargs -r rm -rf'
