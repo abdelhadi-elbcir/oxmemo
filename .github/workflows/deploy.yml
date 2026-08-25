@@ -1,37 +1,55 @@
-name: Deploy React App
+name: Deploy React App to VPS
 
 on:
   push:
     branches:
       - main
 
+  workflow_dispatch:
+
 permissions:
   contents: read
 
 concurrency:
-  group: production
+  group: production-deployment
   cancel-in-progress: true
 
 jobs:
   deploy:
+    name: Build and Deploy
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      # --------------------------------------------------
+      # 1. Checkout repository
+      # --------------------------------------------------
+      - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Setup Node
+      # --------------------------------------------------
+      # 2. Setup Node.js
+      # --------------------------------------------------
+      - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
 
+      # --------------------------------------------------
+      # 3. Install dependencies
+      # --------------------------------------------------
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      # --------------------------------------------------
+      # 4. Build React / Vite application
+      # --------------------------------------------------
+      - name: Build application
         run: npm run build
 
+      # --------------------------------------------------
+      # 5. Configure SSH
+      # --------------------------------------------------
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh
@@ -39,9 +57,22 @@ jobs:
           echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
 
-          echo "${{ secrets.VPS_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
+      # --------------------------------------------------
+      # 6. Test SSH connection
+      # --------------------------------------------------
+      - name: Test SSH connection
+        run: |
+          ssh \
+            -i ~/.ssh/id_ed25519 \
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+            "echo 'SSH connection successful' && whoami && hostname"
+
+      # --------------------------------------------------
+      # 7. Create release directory on VPS
+      # --------------------------------------------------
       - name: Create release directory
         run: |
           ssh \
@@ -49,13 +80,21 @@ jobs:
             ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
             "mkdir -p /var/www/my-react-app/releases/${{ github.sha }}"
 
-      - name: Upload build
+      # --------------------------------------------------
+      # 8. Upload build to VPS
+      # --------------------------------------------------
+      - name: Upload application
         run: |
-          rsync -az --delete \
+          rsync \
+            -az \
+            --delete \
             -e "ssh -i ~/.ssh/id_ed25519" \
             dist/ \
             ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/my-react-app/releases/${{ github.sha }}/
 
+      # --------------------------------------------------
+      # 9. Activate new release
+      # --------------------------------------------------
       - name: Activate release
         run: |
           ssh \
@@ -63,9 +102,21 @@ jobs:
             ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
             "ln -sfn /var/www/my-react-app/releases/${{ github.sha }} /var/www/my-react-app/current"
 
+      # --------------------------------------------------
+      # 10. Delete old releases
+      # Keep latest 5
+      # --------------------------------------------------
       - name: Clean old releases
         run: |
           ssh \
             -i ~/.ssh/id_ed25519 \
             ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
             'cd /var/www/my-react-app/releases && ls -dt */ 2>/dev/null | tail -n +6 | xargs -r rm -rf'
+
+      # --------------------------------------------------
+      # 11. Deployment information
+      # --------------------------------------------------
+      - name: Deployment completed
+        run: |
+          echo "Deployment successful"
+          echo "Commit: ${{ github.sha }}"
