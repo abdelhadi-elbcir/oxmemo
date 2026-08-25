@@ -1,4 +1,4 @@
-name: Deploy React App to VPS
+name: Deploy oxmemo.com to VPS
 
 on:
   push:
@@ -11,12 +11,15 @@ permissions:
   contents: read
 
 concurrency:
-  group: production-deployment
+  group: oxmemo-production-deployment
   cancel-in-progress: true
+
+env:
+  APP_DIR: /var/www/oxmemo.com
 
 jobs:
   deploy:
-    name: Build and Deploy
+    name: Build and Deploy oxmemo.com
     runs-on: ubuntu-latest
 
     steps:
@@ -48,11 +51,25 @@ jobs:
         run: npm run build
 
       # --------------------------------------------------
-      # 5. Configure SSH
+      # 5. Verify build
+      # --------------------------------------------------
+      - name: Verify build
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "ERROR: dist directory does not exist."
+            exit 1
+          fi
+
+          echo "Build generated successfully:"
+          ls -lah dist/
+
+      # --------------------------------------------------
+      # 6. Configure SSH
       # --------------------------------------------------
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
 
           echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
@@ -61,27 +78,28 @@ jobs:
           chmod 600 ~/.ssh/known_hosts
 
       # --------------------------------------------------
-      # 6. Test SSH connection
+      # 7. Test SSH connection
       # --------------------------------------------------
       - name: Test SSH connection
         run: |
           ssh \
             -i ~/.ssh/id_ed25519 \
+            -o StrictHostKeyChecking=yes \
             ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
             "echo 'SSH connection successful' && whoami && hostname"
 
       # --------------------------------------------------
-      # 7. Create release directory on VPS
+      # 8. Create application/release directory
       # --------------------------------------------------
       - name: Create release directory
         run: |
           ssh \
             -i ~/.ssh/id_ed25519 \
             ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
-            "mkdir -p /var/www/my-react-app/releases/${{ github.sha }}"
+            "mkdir -p ${{ env.APP_DIR }}/releases/${{ github.sha }}"
 
       # --------------------------------------------------
-      # 8. Upload build to VPS
+      # 9. Upload build
       # --------------------------------------------------
       - name: Upload application
         run: |
@@ -90,33 +108,47 @@ jobs:
             --delete \
             -e "ssh -i ~/.ssh/id_ed25519" \
             dist/ \
-            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/my-react-app/releases/${{ github.sha }}/
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ env.APP_DIR }}/releases/${{ github.sha }}/
 
       # --------------------------------------------------
-      # 9. Activate new release
+      # 10. Activate new release
       # --------------------------------------------------
       - name: Activate release
         run: |
           ssh \
             -i ~/.ssh/id_ed25519 \
             ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
-            "ln -sfn /var/www/my-react-app/releases/${{ github.sha }} /var/www/my-react-app/current"
+            "ln -sfn ${{ env.APP_DIR }}/releases/${{ github.sha }} ${{ env.APP_DIR }}/current"
 
       # --------------------------------------------------
-      # 10. Delete old releases
-      # Keep latest 5
+      # 11. Verify deployed files
+      # --------------------------------------------------
+      - name: Verify deployment
+        run: |
+          ssh \
+            -i ~/.ssh/id_ed25519 \
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+            "test -f ${{ env.APP_DIR }}/current/index.html && echo 'index.html found - deployment OK'"
+
+      # --------------------------------------------------
+      # 12. Delete old releases
+      # Keep latest 5 releases
       # --------------------------------------------------
       - name: Clean old releases
         run: |
           ssh \
             -i ~/.ssh/id_ed25519 \
             ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
-            'cd /var/www/my-react-app/releases && ls -dt */ 2>/dev/null | tail -n +6 | xargs -r rm -rf'
+            "cd ${{ env.APP_DIR }}/releases && ls -dt */ 2>/dev/null | tail -n +6 | xargs -r rm -rf"
 
       # --------------------------------------------------
-      # 11. Deployment information
+      # 13. Deployment information
       # --------------------------------------------------
       - name: Deployment completed
         run: |
+          echo "======================================"
           echo "Deployment successful"
+          echo "Domain: https://oxmemo.com"
           echo "Commit: ${{ github.sha }}"
+          echo "Path: ${{ env.APP_DIR }}/current"
+          echo "======================================"
