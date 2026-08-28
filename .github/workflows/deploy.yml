@@ -1,4 +1,4 @@
-name: Deploy oxmemo.com to VPS
+name: Deploy oxmemo.com
 
 on:
   push:
@@ -11,144 +11,139 @@ permissions:
   contents: read
 
 concurrency:
-  group: oxmemo-production-deployment
+  group: oxmemo-production
   cancel-in-progress: true
-
-env:
-  APP_DIR: /var/www/oxmemo.com
 
 jobs:
   deploy:
-    name: Build and Deploy oxmemo.com
+    name: Build and Deploy
     runs-on: ubuntu-latest
 
     steps:
-      # --------------------------------------------------
-      # 1. Checkout repository
-      # --------------------------------------------------
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
 
-      # --------------------------------------------------
-      # 2. Setup Node.js
-      # --------------------------------------------------
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 22
           cache: npm
 
-      # --------------------------------------------------
-      # 3. Install dependencies
-      # --------------------------------------------------
       - name: Install dependencies
-        run: npm ci
+        shell: bash
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
 
-      # --------------------------------------------------
-      # 4. Build React / Vite application
-      # --------------------------------------------------
-      - name: Build application
+      - name: Build React application
         run: npm run build
 
-      # --------------------------------------------------
-      # 5. Verify build
-      # --------------------------------------------------
-      - name: Verify build
+      - name: Detect build directory
+        shell: bash
         run: |
-          if [ ! -d "dist" ]; then
-            echo "ERROR: dist directory does not exist."
+          if [ -f "dist/index.html" ]; then
+            echo "BUILD_DIR=dist" >> "$GITHUB_ENV"
+            echo "Using Vite build directory: dist"
+
+          elif [ -f "build/index.html" ]; then
+            echo "BUILD_DIR=build" >> "$GITHUB_ENV"
+            echo "Using CRA build directory: build"
+
+          else
+            echo "ERROR: Could not find dist/index.html or build/index.html"
             exit 1
           fi
 
-          echo "Build generated successfully:"
-          ls -lah dist/
-
-      # --------------------------------------------------
-      # 6. Configure SSH
-      # --------------------------------------------------
       - name: Configure SSH
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
 
-          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/oxmemo_deploy_key
+          chmod 600 ~/.ssh/oxmemo_deploy_key
 
-          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
+          ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
 
-      # --------------------------------------------------
-      # 7. Test SSH connection
-      # --------------------------------------------------
       - name: Test SSH connection
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
           ssh \
-            -i ~/.ssh/id_ed25519 \
+            -i ~/.ssh/oxmemo_deploy_key \
             -o StrictHostKeyChecking=yes \
-            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
-            "echo 'SSH connection successful' && whoami && hostname"
+            root@"$VPS_HOST" \
+            "echo 'SSH connection successful'"
 
-      # --------------------------------------------------
-      # 8. Create application/release directory
-      # --------------------------------------------------
-      - name: Create release directory
+      - name: Prepare deployment directory
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
           ssh \
-            -i ~/.ssh/id_ed25519 \
-            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
-            "mkdir -p ${{ env.APP_DIR }}/releases/${{ github.sha }}"
+            -i ~/.ssh/oxmemo_deploy_key \
+            -o StrictHostKeyChecking=yes \
+            root@"$VPS_HOST" \
+            "mkdir -p /var/www/oxmemo.com"
 
-      # --------------------------------------------------
-      # 9. Upload build
-      # --------------------------------------------------
-      - name: Upload application
+      - name: Deploy React application
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
           rsync \
             -az \
             --delete \
-            -e "ssh -i ~/.ssh/id_ed25519" \
-            dist/ \
-            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ env.APP_DIR }}/releases/${{ github.sha }}/
+            -e "ssh -i ~/.ssh/oxmemo_deploy_key -o StrictHostKeyChecking=yes" \
+            "${BUILD_DIR}/" \
+            root@"$VPS_HOST":/var/www/oxmemo.com/
 
-      # --------------------------------------------------
-      # 10. Activate new release
-      # --------------------------------------------------
-      - name: Activate release
+      - name: Fix permissions and SELinux context
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
           ssh \
-            -i ~/.ssh/id_ed25519 \
-            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
-            "ln -sfn ${{ env.APP_DIR }}/releases/${{ github.sha }} ${{ env.APP_DIR }}/current"
+            -i ~/.ssh/oxmemo_deploy_key \
+            -o StrictHostKeyChecking=yes \
+            root@"$VPS_HOST" << 'EOF'
 
-      # --------------------------------------------------
-      # 11. Verify deployed files
-      # --------------------------------------------------
-      - name: Verify deployment
+          set -e
+
+          chown -R root:root /var/www/oxmemo.com
+
+          find /var/www/oxmemo.com \
+            -type d \
+            -exec chmod 755 {} \;
+
+          find /var/www/oxmemo.com \
+            -type f \
+            -exec chmod 644 {} \;
+
+          restorecon -RF /var/www/oxmemo.com
+
+          nginx -t
+
+          systemctl reload nginx
+
+          echo "Deployment completed successfully"
+
+          EOF
+
+      - name: Verify deployed site
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
           ssh \
-            -i ~/.ssh/id_ed25519 \
-            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
-            "test -f ${{ env.APP_DIR }}/current/index.html && echo 'index.html found - deployment OK'"
-
-      # --------------------------------------------------
-      # 12. Delete old releases
-      # Keep latest 5 releases
-      # --------------------------------------------------
-      - name: Clean old releases
-        run: |
-          ssh \
-            -i ~/.ssh/id_ed25519 \
-            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
-            "cd ${{ env.APP_DIR }}/releases && ls -dt */ 2>/dev/null | tail -n +6 | xargs -r rm -rf"
-
-      # --------------------------------------------------
-      # 13. Deployment information
-      # --------------------------------------------------
-      - name: Deployment completed
-        run: |
-          echo "======================================"
-          echo "Deployment successful"
-          echo "Domain: https://oxmemo.com"
-          echo "Commit: ${{ github.sha }}"
-          echo "Path: ${{ env.APP_DIR }}/current"
-          echo "======================================"
+            -i ~/.ssh/oxmemo_deploy_key \
+            root@"$VPS_HOST" \
+            "test -f /var/www/oxmemo.com/index.html && echo 'index.html exists'"
