@@ -5,6 +5,7 @@ export const PACKS = [
     tagline: "Immortalisez un voyage en solo",
     price: 299,
     prices: { paper: 299, cardboard: 399 },
+    originalPrices: { paper: 399, cardboard: 529 },
     img: "https://storiz.ma/cdn/shop/files/A4_notebook_on_202604112215.jpg?v=1775942148&width=480",
     features: ["1 album photo", "Mise en page soignée", "Destination au choix", "Livraison gratuite"],
     popular: false,
@@ -15,6 +16,7 @@ export const PACKS = [
     tagline: "Partagez vos souvenirs à deux",
     price: 549,
     prices: { paper: 549, cardboard: 699 },
+    originalPrices: { paper: 729, cardboard: 929 },
     img: "https://storiz.ma/cdn/shop/files/downloadrr.png?v=1775942292&width=480",
     features: ["2 albums photo", "Mise en page soignée", "Destinations au choix", "Livraison gratuite"],
     popular: true,
@@ -25,6 +27,7 @@ export const PACKS = [
     tagline: "Offrez à toute la famille",
     price: 799,
     prices: { paper: 799, cardboard: 999 },
+    originalPrices: { paper: 1069, cardboard: 1329 },
     img: "https://storiz.ma/cdn/shop/files/Three_A4_notebooks_202604112217.jpg?v=1775942292&width=480",
     features: ["3 albums photo", "Mise en page soignée", "Destinations au choix", "Livraison gratuite"],
     popular: false,
@@ -54,7 +57,7 @@ export const TESTIMONIALS = [
 export const FAQS = [
   { q: "Comment se déroule la création de mon album ?", a: "Vous choisissez une formule, envoyez vos photos à OXmemo, puis nous préparons soigneusement la mise en page. Vous validez avant impression." },
   { q: "Combien de photos faut-il prévoir ?", a: "Comptez environ 1 à 2 photos par page selon la mise en page choisie, soit 50 à 100 photos pour un album de 50 pages." },
-  { q: "Puis-je ajouter des pages supplémentaires ?", a: "Oui, chaque page supplémentaire est facturée 8 MAD et peut être ajoutée directement depuis l'éditeur en ligne." },
+  { q: "Puis-je ajouter des pages supplémentaires ?", a: "Oui. Les formules incluent de 30 à 50 pages. Au-delà de 50 pages, chaque tranche supplémentaire de 10 pages est facturée 80 MAD." },
   { q: "Comment fonctionne le paiement ?", a: "Un acompte de 50 MAD est obligatoire pour confirmer la commande personnalisée et lancer sa préparation. Le solde est payé à la livraison." },
   { q: "Quel est le délai de livraison ?", a: "Comptez 5 à 7 jours ouvrés après validation de la maquette finale, livraison gratuite incluse." },
 ];

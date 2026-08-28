@@ -40,8 +40,8 @@ export default function FormatSection() {
             <strong className="font-display" style={{ color: COLORS.gold, display: "block", fontSize: 17, marginBottom: 8 }}>
               21 × 21 cm — couverture rigide
             </strong>
-            Papier photo mat premium 250g, reliure cousue, jusqu'à 50 pages extensibles à volonté (8 MAD/page
-            supplémentaire).
+            Papier photo mat premium 250g, reliure cousue, de 30 à 50 pages incluses, puis 80 MAD par tranche de 10 pages
+            supplémentaires.
           </div>
         </div>
       </div>

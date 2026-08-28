@@ -127,9 +127,11 @@ export default function OrderForm({ selectedPack, onSelectPack }) {
   const [savedOrder, setSavedOrder] = useState(null);
 
   const extraPages = Math.max(0, form.pages - 50);
+  const extraPageBlocks = Math.ceil(extraPages / 10);
+  const extraPagesPrice = extraPageBlocks * 80;
   const selectedCover = COVER_TYPES.find((type) => type.id === coverType);
   const packPrice = pack?.prices?.[coverType] ?? pack?.price ?? 0;
-  const total = packPrice + extraPages * 8;
+  const total = packPrice + extraPagesPrice;
   const deposit = 50;
   const remainingBalance = Math.max(0, total - deposit);
 
@@ -364,7 +366,7 @@ export default function OrderForm({ selectedPack, onSelectPack }) {
                   <label style={labelStyle}>Nombre de pages</label>
                   <div className="flex items-center gap-3">
                     <button
-                      onClick={() => setForm({ ...form, pages: Math.max(50, form.pages - 10) })}
+                      onClick={() => setForm({ ...form, pages: Math.max(30, form.pages - 10) })}
                       style={{ width: 34, height: 34, borderRadius: 8, border: `1.5px solid ${COLORS.border}`, background: COLORS.mist, cursor: "pointer", fontWeight: 700 }}
                     >
                       −
@@ -377,7 +379,9 @@ export default function OrderForm({ selectedPack, onSelectPack }) {
                       +
                     </button>
                     {extraPages > 0 && (
-                      <span style={{ fontSize: 12, color: COLORS.inkSoft }}>+{extraPages * 8} MAD ({extraPages} pages supp. à 8 MAD)</span>
+                      <span style={{ fontSize: 12, color: COLORS.inkSoft }}>
+                        +{extraPagesPrice} MAD ({extraPageBlocks} tranche{extraPageBlocks > 1 ? "s" : ""} de 10 pages)
+                      </span>
                     )}
                   </div>
                 </div>

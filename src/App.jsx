@@ -13,11 +13,14 @@ import CTABanner from "./components/CTABanner";
 import Footer from "./components/Footer";
 import WhatsAppFloat from "./components/WhatsAppFloat";
 import DashboardApp from "./dashboard/DashboardApp";
+import Blog from "./components/Blog";
 
 function pageFromPath() {
   const path = window.location.pathname.toLowerCase().replace(/\/$/, "");
   if (path === "/user/dashboard") return "dashboard";
   if (path === "/commande") return "order";
+  if (path === "/blog") return "blog";
+  if (path.startsWith("/blog/")) return path.slice(1);
   return "home";
 }
 
@@ -35,6 +38,13 @@ export default function App() {
   }, []);
 
   const navigateTo = (id) => {
+    if (id === "blog" || id.startsWith("blog/")) {
+      window.history.pushState({}, "", `/${id}`);
+      setPage(id);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
     if (id === "order") {
       window.history.pushState({}, "", "/commande");
       setPage("order");
@@ -42,7 +52,7 @@ export default function App() {
       return;
     }
 
-    if (page === "order") {
+    if (page !== "home") {
       window.history.pushState({}, "", "/");
       setPage("home");
       window.setTimeout(() => {
@@ -87,10 +97,12 @@ export default function App() {
           <FAQ />
           <CTABanner onNavigate={navigateTo} />
         </>
-      ) : (
+      ) : page === "order" ? (
         <main style={{ minHeight: "calc(100vh - 160px)", background: `linear-gradient(180deg, ${COLORS.mist}, #fff 70%)` }}>
           <OrderForm selectedPack={selectedPack} onSelectPack={setSelectedPack} />
         </main>
+      ) : (
+        <Blog slug={page.startsWith("blog/") ? page.slice(5) : null} onNavigate={navigateTo} />
       )}
 
       <Footer />

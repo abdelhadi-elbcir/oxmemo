@@ -11,6 +11,35 @@ const TRUST_ITEMS = [
   { Icon: Star, title: "Imprimé au Maroc", text: "Savoir-faire local depuis 2024" },
 ];
 
+const formatPrice = (price) => Number(price).toLocaleString("fr-FR");
+
+function PriceOffer({ label, price, originalPrice, highlighted = false }) {
+  const discount = originalPrice > price
+    ? Math.round(((originalPrice - price) / originalPrice) * 100)
+    : 0;
+
+  return (
+    <div style={{ padding: "12px 10px", borderRadius: 12, background: highlighted ? "rgba(193,155,85,.12)" : COLORS.mist, border: `1px solid ${highlighted ? COLORS.gold : COLORS.border}` }}>
+      <div style={{ color: COLORS.inkSoft, fontSize: 11.5, fontWeight: 700 }}>{label}</div>
+      <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "5px 7px", marginTop: 4 }}>
+        <div className="font-display" style={{ color: COLORS.navy, fontSize: 21, fontWeight: 800, lineHeight: 1.15 }}>
+          {formatPrice(price)} <span style={{ fontSize: 11 }}>MAD</span>
+        </div>
+        {discount > 0 && (
+          <>
+            <span style={{ color: COLORS.inkSoft, fontSize: 11.5, textDecoration: "line-through" }}>
+              {formatPrice(originalPrice)} MAD
+            </span>
+            <span style={{ borderRadius: 999, background: "#dc2626", color: "#fff", padding: "4px 7px", fontSize: 9.5, fontWeight: 900, lineHeight: 1, whiteSpace: "nowrap" }}>
+              -{discount}%
+            </span>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function Packs({ selectedPack, onSelectPack, onNavigate }) {
   return (
     <section id="packs" style={{ background: COLORS.mist, padding: "88px 0" }}>
@@ -68,18 +97,13 @@ export default function Packs({ selectedPack, onSelectPack, onNavigate }) {
                 </h3>
                 <p style={{ color: COLORS.inkSoft, fontSize: 14, marginTop: 6 }}>{pack.tagline}</p>
                 <div className="grid grid-cols-2 gap-2" style={{ marginTop: 18 }}>
-                  <div style={{ padding: "12px 10px", borderRadius: 12, background: COLORS.mist, border: `1px solid ${COLORS.border}` }}>
-                    <div style={{ color: COLORS.inkSoft, fontSize: 11.5, fontWeight: 700 }}>Couverture papier</div>
-                    <div className="font-display" style={{ color: COLORS.navy, fontSize: 21, fontWeight: 800, marginTop: 4 }}>
-                      {pack.prices.paper} <span style={{ fontSize: 11 }}>MAD</span>
-                    </div>
-                  </div>
-                  <div style={{ padding: "12px 10px", borderRadius: 12, background: "rgba(193,155,85,.12)", border: `1px solid ${COLORS.gold}` }}>
-                    <div style={{ color: COLORS.inkSoft, fontSize: 11.5, fontWeight: 700 }}>Couverture cartonnée</div>
-                    <div className="font-display" style={{ color: COLORS.navy, fontSize: 21, fontWeight: 800, marginTop: 4 }}>
-                      {pack.prices.cardboard} <span style={{ fontSize: 11 }}>MAD</span>
-                    </div>
-                  </div>
+                  <PriceOffer label="Couverture papier" price={pack.prices.paper} originalPrice={pack.originalPrices?.paper} />
+                  <PriceOffer
+                    label="Couverture cartonnée"
+                    price={pack.prices.cardboard}
+                    originalPrice={pack.originalPrices?.cardboard}
+                    highlighted
+                  />
                 </div>
                 <ul style={{ listStyle: "none", padding: 0, margin: "18px 0 24px", display: "flex", flexDirection: "column", gap: 10 }}>
                   {pack.features.map((f) => (
