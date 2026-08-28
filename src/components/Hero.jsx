@@ -6,7 +6,7 @@ import Button from "./ui/Button";
 const ALBUM_CARDS = [
   {
     label: "MARRAKECH",
-    image: "/designs/marrakech.png",
+    image: "/designs/marrakech.webp",
     style: {
       transform: "rotate(-9deg) translate(-38px,10px)",
       opacity: 0.82,
@@ -15,7 +15,7 @@ const ALBUM_CARDS = [
   },
   {
     label: "CHEFCHAOUEN",
-    image: "/designs/chefchaouen.png",
+    image: "/designs/chefchaouen.webp",
     style: {
       transform: "rotate(6deg) translate(30px,-8px)",
       opacity: 0.88,
@@ -24,7 +24,7 @@ const ALBUM_CARDS = [
   },
   {
     label: "DAKHLA",
-    image: "/designs/dakhla.png",
+    image: "/designs/dakhla.webp",
     style: { zIndex: 3 },
   },
 ];
@@ -108,6 +108,7 @@ export default function Hero({ onNavigate }) {
                   src={c.image}
                   alt={`Couverture d’album ${c.label}`}
                   loading={i === 2 ? "eager" : "lazy"}
+                  decoding="async"
                   style={{ width: "100%", height: "100%", display: "block", objectFit: "cover" }}
                 />
               </div>

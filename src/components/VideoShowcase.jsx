@@ -1,6 +1,49 @@
+import { useEffect, useRef, useState } from "react";
 import { COLORS } from "../theme/colors";
 import { VIDEOS } from "../data/content";
 import Eyebrow from "./ui/Eyebrow";
+
+function LazyVideo({ video }) {
+  const containerRef = useRef(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
+
+  useEffect(() => {
+    const node = containerRef.current;
+    if (!node) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "250px 0px" }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        borderRadius: 18,
+        overflow: "hidden",
+        background: `linear-gradient(145deg, ${COLORS.navy}, ${COLORS.navyDeep})`,
+        aspectRatio: "9/13",
+        position: "relative",
+        boxShadow: "0 20px 45px -20px rgba(14,61,48,0.25)",
+      }}
+    >
+      {shouldLoad && (
+        <video autoPlay muted loop playsInline preload="none" src={video.src} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+      )}
+      <span style={{ position: "absolute", top: 14, left: 14, background: "rgba(8,42,33,0.55)", backdropFilter: "blur(4px)", color: COLORS.white, fontSize: 12, fontWeight: 600, padding: "6px 12px", borderRadius: 999 }}>
+        {video.tag}
+      </span>
+    </div>
+  );
+}
 
 export default function VideoShowcase() {
   return (
@@ -16,44 +59,7 @@ export default function VideoShowcase() {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {VIDEOS.map((v) => (
-            <div
-              key={v.tag}
-              style={{
-                borderRadius: 18,
-                overflow: "hidden",
-                background: COLORS.navy,
-                aspectRatio: "9/13",
-                position: "relative",
-                boxShadow: "0 20px 45px -20px rgba(14,61,48,0.25)",
-              }}
-            >
-              <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                src={v.src}
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
-              <span
-                style={{
-                  position: "absolute",
-                  top: 14,
-                  left: 14,
-                  background: "rgba(8,42,33,0.55)",
-                  backdropFilter: "blur(4px)",
-                  color: COLORS.white,
-                  fontSize: 12,
-                  fontWeight: 600,
-                  padding: "6px 12px",
-                  borderRadius: 999,
-                }}
-              >
-                {v.tag}
-              </span>
-            </div>
-          ))}
+          {VIDEOS.map((video) => <LazyVideo key={video.tag} video={video} />)}
         </div>
       </div>
     </section>

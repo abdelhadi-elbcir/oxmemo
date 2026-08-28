@@ -60,7 +60,7 @@ export default function Packs({ selectedPack, onSelectPack, onNavigate }) {
                 </div>
               )}
               <div style={{ aspectRatio: "16/11", overflow: "hidden", background: COLORS.mist }}>
-                <img src={pack.img} alt={pack.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                <img src={pack.img} alt={pack.name} loading="lazy" decoding="async" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               </div>
               <div style={{ padding: "26px 26px 28px", display: "flex", flexDirection: "column", flex: 1 }}>
                 <h3 className="font-display" style={{ fontSize: 21, color: COLORS.navy }}>

@@ -18,14 +18,14 @@ const COVER_TYPES = [
 const CATEGORIES = ["Tous", "Voyage", "Anniversaire", "Mariage", "Famille", "Naissance", "Maroc", "Autre"];
 
 const DESIGNS = [
-  { id: 1, category: "Maroc", title: "MARRAKECH", image: "/designs/marrakech.png" },
-  { id: 2, category: "Maroc", title: "CHEFCHAOUEN", image: "/designs/chefchaouen.png" },
-  { id: 3, category: "Maroc", title: "ESSAOUIRA", image: "/designs/essaouira.png" },
-  { id: 4, category: "Maroc", title: "DAKHLA", image: "/designs/dakhla.png" },
-  { id: 5, category: "Maroc", title: "MAROC", image: "/designs/maroc.png" },
-  { id: 6, category: "Voyage", title: "FRANCE", image: "/designs/france.png" },
-  { id: 7, category: "Voyage", title: "ITALIE", image: "/designs/italie.png" },
-  { id: 8, category: "Voyage", title: "TURQUIE", image: "/designs/turquie.png" },
+  { id: 1, category: "Maroc", title: "MARRAKECH", image: "/designs/marrakech.webp" },
+  { id: 2, category: "Maroc", title: "CHEFCHAOUEN", image: "/designs/chefchaouen.webp" },
+  { id: 3, category: "Maroc", title: "ESSAOUIRA", image: "/designs/essaouira.webp" },
+  { id: 4, category: "Maroc", title: "DAKHLA", image: "/designs/dakhla.webp" },
+  { id: 5, category: "Maroc", title: "MAROC", image: "/designs/maroc.webp" },
+  { id: 6, category: "Voyage", title: "FRANCE", image: "/designs/france.webp" },
+  { id: 7, category: "Voyage", title: "ITALIE", image: "/designs/italie.webp" },
+  { id: 8, category: "Voyage", title: "TURQUIE", image: "/designs/turquie.webp" },
 ];
 
 const inputStyle = {
@@ -520,6 +520,7 @@ export default function OrderForm({ selectedPack, onSelectPack }) {
                       src={d.image}
                       alt={`Design de couverture ${d.title}`}
                       loading="lazy"
+                      decoding="async"
                       style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                     />
                     <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, padding: "28px 11px 10px", color: "#fff", fontWeight: 800, fontSize: 12.5, lineHeight: 1.25, textAlign: "left", background: "linear-gradient(transparent, rgba(5, 20, 34, .88))" }}>
