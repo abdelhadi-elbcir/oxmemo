@@ -19,9 +19,23 @@ jobs:
     name: Build and Deploy
     runs-on: ubuntu-latest
 
+    # GitHub Environment
+    # Repository → Settings → Environments → production
+    environment: production
+
     steps:
+
+      # --------------------------------------------------
+      # 1. Checkout
+      # --------------------------------------------------
+
       - name: Checkout repository
         uses: actions/checkout@v4
+
+
+      # --------------------------------------------------
+      # 2. Node.js
+      # --------------------------------------------------
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -29,33 +43,97 @@ jobs:
           node-version: 22
           cache: npm
 
+
+      # --------------------------------------------------
+      # 3. Install dependencies
+      # --------------------------------------------------
+
       - name: Install dependencies
         shell: bash
         run: |
+          set -e
+
           if [ -f package-lock.json ]; then
             npm ci
           else
             npm install
           fi
 
+
+      # --------------------------------------------------
+      # 4. Validate production environment
+      # --------------------------------------------------
+
+      - name: Validate production environment variables
+        shell: bash
+        env:
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+        run: |
+          set -e
+
+          if [ -z "$VITE_API_URL" ]; then
+            echo "ERROR: VITE_API_URL is not defined."
+            echo "Create it in:"
+            echo "GitHub → Settings → Environments → production → Environment variables"
+            exit 1
+          fi
+
+          echo "Production environment variables are configured."
+          echo "API URL: $VITE_API_URL"
+
+
+      # --------------------------------------------------
+      # 5. Build React / Vite application
+      # --------------------------------------------------
+
       - name: Build React application
-        run: npm run build
+        shell: bash
+        env:
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+        run: |
+          set -e
+
+          echo "Building production React application..."
+
+          npm run build
+
+          echo "Build completed successfully."
+
+
+      # --------------------------------------------------
+      # 6. Detect build directory
+      # --------------------------------------------------
 
       - name: Detect build directory
         shell: bash
         run: |
+          set -e
+
           if [ -f "dist/index.html" ]; then
+
             echo "BUILD_DIR=dist" >> "$GITHUB_ENV"
             echo "Using Vite build directory: dist"
 
           elif [ -f "build/index.html" ]; then
+
             echo "BUILD_DIR=build" >> "$GITHUB_ENV"
-            echo "Using CRA build directory: build"
+            echo "Using React build directory: build"
 
           else
-            echo "ERROR: Could not find dist/index.html or build/index.html"
+
+            echo "ERROR: Could not find:"
+            echo "  dist/index.html"
+            echo "or"
+            echo "  build/index.html"
+
             exit 1
+
           fi
+
+
+      # --------------------------------------------------
+      # 7. Configure SSH
+      # --------------------------------------------------
 
       - name: Configure SSH
         shell: bash
@@ -63,6 +141,8 @@ jobs:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
         run: |
+          set -e
+
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
 
@@ -72,33 +152,56 @@ jobs:
           ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
+
+      # --------------------------------------------------
+      # 8. Test SSH
+      # --------------------------------------------------
+
       - name: Test SSH connection
         shell: bash
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
+          set -e
+
           ssh \
             -i ~/.ssh/oxmemo_deploy_key \
             -o StrictHostKeyChecking=yes \
             root@"$VPS_HOST" \
             "echo 'SSH connection successful'"
 
+
+      # --------------------------------------------------
+      # 9. Prepare deployment directory
+      # --------------------------------------------------
+
       - name: Prepare deployment directory
         shell: bash
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
+          set -e
+
           ssh \
             -i ~/.ssh/oxmemo_deploy_key \
             -o StrictHostKeyChecking=yes \
             root@"$VPS_HOST" \
             "mkdir -p /var/www/oxmemo.com"
 
+
+      # --------------------------------------------------
+      # 10. Deploy application
+      # --------------------------------------------------
+
       - name: Deploy React application
         shell: bash
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
+          set -e
+
+          echo "Deploying ${BUILD_DIR} to VPS..."
+
           rsync \
             -az \
             --delete \
@@ -106,11 +209,20 @@ jobs:
             "${BUILD_DIR}/" \
             root@"$VPS_HOST":/var/www/oxmemo.com/
 
+          echo "Files deployed successfully."
+
+
+      # --------------------------------------------------
+      # 11. Permissions + SELinux + Nginx
+      # --------------------------------------------------
+
       - name: Fix permissions and SELinux context
         shell: bash
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
+          set -e
+
           ssh \
             -i ~/.ssh/oxmemo_deploy_key \
             -o StrictHostKeyChecking=yes \
@@ -118,32 +230,76 @@ jobs:
 
           set -e
 
+          echo "Fixing ownership..."
+
           chown -R root:root /var/www/oxmemo.com
+
+
+          echo "Fixing directory permissions..."
 
           find /var/www/oxmemo.com \
             -type d \
             -exec chmod 755 {} \;
 
+
+          echo "Fixing file permissions..."
+
           find /var/www/oxmemo.com \
             -type f \
             -exec chmod 644 {} \;
 
+
+          echo "Restoring SELinux contexts..."
+
           restorecon -RF /var/www/oxmemo.com
+
+
+          echo "Testing Nginx configuration..."
 
           nginx -t
 
+
+          echo "Reloading Nginx..."
+
           systemctl reload nginx
 
-          echo "Deployment completed successfully"
+
+          echo "Deployment completed successfully."
 
           EOF
+
+
+      # --------------------------------------------------
+      # 12. Verify deployed files
+      # --------------------------------------------------
 
       - name: Verify deployed site
         shell: bash
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
+          set -e
+
           ssh \
             -i ~/.ssh/oxmemo_deploy_key \
+            -o StrictHostKeyChecking=yes \
             root@"$VPS_HOST" \
             "test -f /var/www/oxmemo.com/index.html && echo 'index.html exists'"
+
+
+      # --------------------------------------------------
+      # 13. Final deployment confirmation
+      # --------------------------------------------------
+
+      - name: Deployment summary
+        shell: bash
+        env:
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+        run: |
+          echo "--------------------------------------"
+          echo "OXMEMO DEPLOYMENT SUCCESSFUL"
+          echo "--------------------------------------"
+          echo "Site: https://oxmemo.com"
+          echo "API:  $VITE_API_URL"
+          echo "Environment: production"
+          echo "--------------------------------------"
