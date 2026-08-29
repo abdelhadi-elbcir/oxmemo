@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { AlertCircle, Clock, LogOut, Mail, Package, RefreshCw, Search, Trash2, Wallet, X, Lock } from "lucide-react";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+const API_URL = "https://api.oxmemo.com";
 const STORAGE_KEY = "oxmemo_dashboard_token";
 
 const STATUSES = [
