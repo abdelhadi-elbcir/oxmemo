@@ -8,7 +8,7 @@ import Button from "./ui/Button";
 // TODO: remplacer par le vrai numéro WhatsApp OXmemo (format international, sans "+")
 const WHATSAPP_NUMBER = "212600000000";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+const API_URL = "https://api.oxmemo.com";
 
 const COVER_TYPES = [
   { id: "cardboard", name: "Couverture rigide cartonnée", description: "Solide, durable et premium" },
