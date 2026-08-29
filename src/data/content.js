@@ -17,7 +17,7 @@ export const PACKS = [
     price: 549,
     prices: { paper: 549, cardboard: 699 },
     originalPrices: { paper: 729, cardboard: 929 },
-    img: "/designs/pack-duo-books.webp",
+    img: "/designs/pack-duo-books-a4-2026.webp",
     features: ["2 albums photo", "Mise en page soignée", "Destinations au choix", "Livraison gratuite"],
     popular: true,
   },
@@ -28,7 +28,7 @@ export const PACKS = [
     price: 799,
     prices: { paper: 799, cardboard: 999 },
     originalPrices: { paper: 1069, cardboard: 1329 },
-    img: "/designs/pack-trio-books.webp",
+    img: "/designs/pack-trio-books-a4-2026.webp",
     features: ["3 albums photo", "Mise en page soignée", "Destinations au choix", "Livraison gratuite"],
     popular: false,
   },
@@ -41,10 +41,10 @@ export const VIDEOS = [
 ];
 
 export const STEPS = [
-  { icon: "📋", title: "Choisissez votre formule", text: "Sélectionnez Solo, Duo ou Trio et votre destination parmi nos modèles disponibles." },
-  { icon: "📲", title: "Importez vos photos", text: "Téléchargez vos photos directement dans l'application OXmemo, en quelques clics." },
-  { icon: "✨", title: "Nous créons votre mise en page", text: "Vos photos sont organisées avec soin pour raconter naturellement l’histoire de votre voyage." },
-  { icon: "📦", title: "Recevez votre album", text: "Validez votre commande et recevez votre album premium en 5–7 jours, livré gratuitement." },
+  { title: "Choisissez votre formule", text: "Sélectionnez Solo, Duo ou Trio et votre destination parmi nos modèles disponibles." },
+  { title: "Importez vos photos", text: "Téléchargez vos photos directement dans l'application OXmemo, en quelques clics." },
+  { title: "Nous créons votre mise en page", text: "Vos photos sont organisées avec soin pour raconter naturellement l’histoire de votre voyage." },
+  { title: "Recevez votre album", text: "Validez votre commande et recevez votre album premium en 5–7 jours, livré gratuitement." },
 ];
 
 export const TESTIMONIALS = [

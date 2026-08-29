@@ -19,10 +19,10 @@ export default function CTABanner({ onNavigate }) {
             Prêt à immortaliser vos souvenirs ?
           </Eyebrow>
           <h2 className="font-display" style={{ color: COLORS.navyDeep, fontSize: 28, marginTop: 14 }}>
-            Créez votre album OXmemo dès aujourd'hui
+            Ne laissez pas vos plus beaux souvenirs dormir dans votre téléphone
           </h2>
           <p style={{ marginTop: 12, fontSize: 15.5, color: COLORS.navyDeep }}>
-            Mise en page soignée, impression premium, livraison gratuite partout au Maroc.
+            Racontez votre histoire dans un album premium que vous aimerez feuilleter et transmettre.
           </p>
           <div style={{ marginTop: 26 }}>
             <Button variant="navy" onClick={() => onNavigate("order")}>

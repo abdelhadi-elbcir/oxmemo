@@ -50,7 +50,7 @@ export default function Packs({ selectedPack, onSelectPack, onNavigate }) {
             Choisissez votre pack
           </h2>
           <p style={{ color: COLORS.inkSoft, marginTop: 12, fontSize: 16 }}>
-            Une formule pour chaque souvenir — seul, à deux, ou en famille.
+            Une formule pour chaque souvenir : seul, à deux ou en famille.
           </p>
         </div>
 

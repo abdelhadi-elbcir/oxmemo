@@ -144,13 +144,13 @@ export default function OrderForm({ selectedPack, onSelectPack }) {
   const hasCoverDescription = coverDescription.trim().length > 0;
   const canGoStep2 = selectedDesign !== null || hasCoverDescription;
   const designTitle = selectedDesign !== null
-    ? DESIGNS.find((d) => d.id === selectedDesign)?.title ?? "—"
+    ? DESIGNS.find((d) => d.id === selectedDesign)?.title ?? "Non renseigné"
     : coverDescription.trim();
 
   const finalRef = savedOrder?.order_ref ?? orderRef;
 
   const waMessage = encodeURIComponent(
-    `Bonjour, je viens de valider ma commande ${finalRef} sur OXmemo.\nNom: ${form.name}\nFormule: ${pack?.name} — ${selectedCover?.name} — ${form.pages} pages\nDestination: ${form.destination}\nDesign: ${designTitle}\nAcompte de confirmation: 50 MAD.\nJe vous envoie mes photos ci-joint.`
+    `Bonjour, je viens de valider ma commande ${finalRef} sur OXmemo.\nNom: ${form.name}\nFormule: ${pack?.name}, ${selectedCover?.name}, ${form.pages} pages\nDestination: ${form.destination}\nDesign: ${designTitle}\nAcompte de confirmation: 50 MAD.\nJe vous envoie mes photos ci-joint.`
   );
 
   async function handleSubmitOrder() {
@@ -166,7 +166,7 @@ export default function OrderForm({ selectedPack, onSelectPack }) {
           whatsapp: form.whatsapp,
           address: form.address,
           packId: pack?.id,
-          packName: `${pack?.name} — ${selectedCover?.name}`,
+          packName: `${pack?.name}, ${selectedCover?.name}`,
           packPrice,
           destination: form.destination,
           layout: form.layout,
@@ -329,7 +329,7 @@ export default function OrderForm({ selectedPack, onSelectPack }) {
                           transition: ".15s",
                         }}
                       >
-                        {p.name} — {p.prices[coverType]} MAD
+                        {p.name}, {p.prices[coverType]} MAD
                       </button>
                     ))}
                   </div>
@@ -617,14 +617,14 @@ export default function OrderForm({ selectedPack, onSelectPack }) {
                 <MessageCircle size={20} /> Envoyer mes photos sur WhatsApp
               </a>
               <p style={{ fontSize: 12, color: COLORS.inkSoft, marginTop: 10, lineHeight: 1.6 }}>
-                Envoyez vos photos en DOCUMENT 📎 — on prépare votre album dès réception.
+                Envoyez vos photos en DOCUMENT 📎. On prépare votre album dès réception.
               </p>
 
               <div style={{ marginTop: 24, padding: 18, background: COLORS.mist, borderRadius: 14, textAlign: "left" }}>
                 {[
                   ["Référence", finalRef],
-                  ["Nom", form.name || "—"],
-                  ["Formule", `${pack?.name} — ${selectedCover?.name} — ${form.pages} pages`],
+                  ["Nom", form.name || "Non renseigné"],
+                  ["Formule", `${pack?.name}, ${selectedCover?.name}, ${form.pages} pages`],
                   ["Design", designTitle],
                   ["Total", `${total} MAD`],
                   ["Acompte obligatoire", `${deposit} MAD`],

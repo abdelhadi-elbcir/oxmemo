@@ -13,7 +13,7 @@ export default function Header({ onNavigate }) {
 
   const links = [
     { id: "hero", label: "Accueil" },
-    { id: "packs", label: "Destinations & Events" },
+    { id: "packs", label: "Nos packs" },
     { id: "blog", label: "Blog" },
     { id: "footer", label: "Contact" },
   ];

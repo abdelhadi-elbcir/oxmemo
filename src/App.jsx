@@ -14,6 +14,7 @@ import Footer from "./components/Footer";
 import WhatsAppFloat from "./components/WhatsAppFloat";
 import DashboardApp from "./dashboard/DashboardApp";
 import Blog from "./components/Blog";
+import MemoryStory from "./components/MemoryStory";
 
 function pageFromPath() {
   const path = window.location.pathname.toLowerCase().replace(/\/$/, "");
@@ -36,6 +37,23 @@ export default function App() {
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
+
+  useEffect(() => {
+    const sections = document.querySelectorAll("section");
+    sections.forEach((section) => section.classList.add("reveal-section"));
+
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      }),
+      { threshold: 0.12, rootMargin: "0px 0px -50px" }
+    );
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, [page]);
 
   const navigateTo = (id) => {
     if (id === "blog" || id.startsWith("blog/")) {
@@ -89,6 +107,7 @@ export default function App() {
       {page === "home" ? (
         <>
           <Hero onNavigate={navigateTo} />
+          <MemoryStory onNavigate={navigateTo} />
           <VideoShowcase />
           <Packs selectedPack={selectedPack} onSelectPack={setSelectedPack} onNavigate={navigateTo} />
           <Steps />

@@ -12,36 +12,48 @@ export default function FormatSection() {
           </h2>
         </div>
         <div
-          className="flex flex-wrap items-center justify-center gap-10"
-          style={{ borderRadius: 24, overflow: "hidden", background: `linear-gradient(135deg, ${COLORS.navy}, #1B4636)`, padding: 50 }}
+          className="grid grid-cols-1 lg:grid-cols-5"
+          style={{ borderRadius: 24, overflow: "hidden", background: COLORS.navy, boxShadow: "0 28px 65px -38px rgba(15,46,36,.65)" }}
         >
           <div
+            className="lg:col-span-3"
             style={{
-              width: 200,
-              aspectRatio: "3/4",
-              background: COLORS.white,
-              borderRadius: 8,
-              boxShadow: "0 30px 60px -15px rgba(0,0,0,0.5)",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              padding: 20,
+              position: "relative",
+              minHeight: 360,
+              background: COLORS.mist,
             }}
           >
-            <div className="font-display" style={{ fontWeight: 800, fontSize: 15, color: COLORS.navy }}>
-              OXmemo
-            </div>
-            <div>
-              <div style={{ height: 6, width: "70%", background: COLORS.mist, borderRadius: 3, marginBottom: 8 }} />
-              <div style={{ height: 6, width: "50%", background: COLORS.mist, borderRadius: 3 }} />
+            <img
+              src="/format-album-a4.webp"
+              alt="Album photo A4 vertical avec couverture rigide et pages intérieures"
+              loading="lazy"
+              decoding="async"
+              style={{ width: "100%", height: "100%", position: "absolute", inset: 0, objectFit: "cover" }}
+            />
+            <div style={{ position: "absolute", left: 18, right: 18, bottom: 18, display: "flex", justifyContent: "center" }}>
+              <div style={{ padding: "9px 16px", borderRadius: 999, color: COLORS.navyDeep, background: "rgba(255,255,255,.92)", backdropFilter: "blur(8px)", boxShadow: "0 8px 24px rgba(0,0,0,.16)", fontSize: 13, fontWeight: 800 }}>
+                Format A4 vertical : 21 × 29,7 cm
+              </div>
             </div>
           </div>
-          <div style={{ color: "#C4D6C8", fontSize: 14, maxWidth: 280, lineHeight: 1.7 }}>
-            <strong className="font-display" style={{ color: COLORS.gold, display: "block", fontSize: 17, marginBottom: 8 }}>
-              21 × 21 cm — couverture rigide
+          <div className="lg:col-span-2" style={{ color: "#C4D6C8", padding: "42px 36px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+            <span style={{ color: COLORS.gold, fontSize: 12, fontWeight: 800, letterSpacing: ".08em", textTransform: "uppercase" }}>Format premium</span>
+            <strong className="font-display" style={{ color: COLORS.white, display: "block", fontSize: 26, lineHeight: 1.25, marginTop: 10 }}>
+              Un véritable album A4
             </strong>
-            Papier photo mat premium 250g, reliure cousue, de 30 à 50 pages incluses, puis 80 MAD par tranche de 10 pages
-            supplémentaires.
+            <div className="grid grid-cols-2 gap-3" style={{ marginTop: 24 }}>
+              <div style={{ borderRadius: 12, padding: 14, background: "rgba(255,255,255,.07)", border: "1px solid rgba(255,255,255,.12)" }}>
+                <div style={{ color: COLORS.gold, fontSize: 20, fontWeight: 800 }}>21 cm</div>
+                <div style={{ fontSize: 12, marginTop: 3 }}>Largeur</div>
+              </div>
+              <div style={{ borderRadius: 12, padding: 14, background: "rgba(255,255,255,.07)", border: "1px solid rgba(255,255,255,.12)" }}>
+                <div style={{ color: COLORS.gold, fontSize: 20, fontWeight: 800 }}>29,7 cm</div>
+                <div style={{ fontSize: 12, marginTop: 3 }}>Hauteur</div>
+              </div>
+            </div>
+            <p style={{ fontSize: 14, lineHeight: 1.75, marginTop: 22 }}>
+              Couverture rigide, papier photo mat premium 250 g et reliure soignée. De 30 à 50 pages incluses, puis 80 MAD par tranche de 10 pages supplémentaires.
+            </p>
           </div>
         </div>
       </div>

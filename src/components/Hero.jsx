@@ -56,17 +56,16 @@ export default function Hero({ onNavigate }) {
             un écrin d'<span style={{ color: COLORS.gold }}>exception</span>
           </h1>
           <p style={{ fontSize: 17.5, color: "#D2E3D6", marginTop: 20, maxWidth: 460 }}>
-            Des albums photo premium, façonnés au Maroc. Capturez vos moments précieux dans un livre qui dure toute
-            une vie.
+            Vos voyages méritent mieux que de rester oubliés dans votre téléphone. Transformez-les en un album premium, façonné au Maroc et pensé pour durer toute une vie.
           </p>
           <div className="flex flex-wrap gap-3.5" style={{ marginTop: 32 }}>
             <Button onClick={() => onNavigate("order")}>Commander mon album →</Button>
             <Button variant="outline" onClick={() => onNavigate("packs")}>
-              Destinations & Events
+              Découvrir nos packs
             </Button>
           </div>
           <div className="flex flex-wrap gap-5" style={{ marginTop: 34 }}>
-            {["Imprimé au Maroc", "Livraison gratuite", "Mise en page soignée"].map((t) => (
+            {["Imprimé au Maroc", "Livraison gratuite", "Souvenir pour toute la vie"].map((t) => (
               <span key={t} style={{ fontSize: 13.5, color: "#A9C2AE", display: "flex", alignItems: "center", gap: 7 }}>
                 <Check size={14} color={COLORS.gold} strokeWidth={3} /> {t}
               </span>
@@ -109,6 +108,7 @@ export default function Hero({ onNavigate }) {
                   alt={`Couverture d’album ${c.label}`}
                   loading={i === 2 ? "eager" : "lazy"}
                   decoding="async"
+                  className={`dream-cover dream-cover-${i + 1}`}
                   style={{ width: "100%", height: "100%", display: "block", objectFit: "cover" }}
                 />
               </div>
