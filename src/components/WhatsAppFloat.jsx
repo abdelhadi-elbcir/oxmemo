@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "212600000000";
+const WHATSAPP_NUMBER = "212784781570";
 const MESSAGE = encodeURIComponent("Bonjour OXmemo 👋 J’ai une question sur les albums photo personnalisés.");
 
 export default function WhatsAppFloat() {

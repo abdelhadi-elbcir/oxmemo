@@ -1,4 +1,4 @@
-import { Instagram, Facebook, MessageCircle } from "lucide-react";
+import { Instagram, Facebook, MessageCircle, MapPin, Phone } from "lucide-react";
 import { COLORS } from "../theme/colors";
 
 const socialIconStyle = {
@@ -47,11 +47,19 @@ export default function Footer() {
             <p style={{ marginTop: 16, fontSize: 14, lineHeight: 1.7, maxWidth: 280 }}>
               Vos souvenirs précieux méritent un écrin d'exception. Albums photo personnalisés, imprimés au Maroc.
             </p>
+            <div style={{ display: "grid", gap: 9, marginTop: 18, fontSize: 13.5 }}>
+              <a href="tel:+212784781570" style={{ display: "flex", alignItems: "center", gap: 9, color: "#DCEAE0", textDecoration: "none" }}>
+                <Phone size={16} color={COLORS.gold} /> +212 784-781570
+              </a>
+              <div style={{ display: "flex", alignItems: "center", gap: 9, color: "#DCEAE0" }}>
+                <MapPin size={16} color={COLORS.gold} /> Marrakech, Maroc
+              </div>
+            </div>
             <div className="flex gap-2.5" style={{ marginTop: 20 }}>
               <a href="#" style={socialIconStyle}>
                 <Instagram size={16} />
               </a>
-              <a href="#" style={socialIconStyle}>
+              <a href="https://wa.me/212784781570" target="_blank" rel="noreferrer" aria-label="Contacter OXmemo sur WhatsApp" style={socialIconStyle}>
                 <MessageCircle size={16} />
               </a>
               <a href="#" style={socialIconStyle}>
